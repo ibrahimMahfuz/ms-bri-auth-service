@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://45.32.101.122:3306/auth
+    username: root
+    password: chWy45XCbPXD6b66bycxKRimxhN3RdFryDWMP2e8F4JMz5Rd
+  jpa:
+    hibernate:
+      ddl-auto: update
+  jackson:
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+appication:
+  jwt:
+    properties:
+      secret: pcsindonesiapcsindonesiapcsindonesiapcsindonesia
+      tokenExpirationAfterDays: 10
