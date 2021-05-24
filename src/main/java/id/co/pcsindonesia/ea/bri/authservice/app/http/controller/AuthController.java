@@ -3,18 +3,16 @@ package id.co.pcsindonesia.ea.bri.authservice.app.http.controller;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthCreateNewRoleRequest;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthLoginRequest;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthRegisterRequest;
+import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthGetAllPermissionAndGetPermissionByUserResponse;
+import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthGetAllRoleAndGetRoleByUserResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthRegisterLoginResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.GlobalResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Permission;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Role;
-import id.co.pcsindonesia.ea.bri.authservice.app.model.User;
 import id.co.pcsindonesia.ea.bri.authservice.app.service.PermissionService;
 import id.co.pcsindonesia.ea.bri.authservice.app.service.RoleService;
 import id.co.pcsindonesia.ea.bri.authservice.app.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -85,7 +83,7 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Forbidden",
                     content = @Content) })
     @GetMapping("roles")
-    public List<Role> getAllRole(){
+    public List<AuthGetAllRoleAndGetRoleByUserResponse> getAllRole(){
         return roleService.getAllRole();
     }
 
@@ -99,11 +97,11 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Forbidden",
                     content = @Content) })
     @GetMapping("permissions")
-    public List<Permission> getAllPermission(){
+    public List<AuthGetAllPermissionAndGetPermissionByUserResponse> getAllPermission(){
         return permissionService.getAllPermission();
     }
 
-    @Operation(summary = "Get Role by User", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Get Role by User ID", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get Role Success",
                     content = { @Content(mediaType = "application/json",
@@ -113,7 +111,21 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Forbidden",
                     content = @Content) })
     @GetMapping("roles/by-user/{userId}")
-    public List<Role> getRoleByUser(@PathVariable("userId") Long userId){
+    public List<AuthGetAllRoleAndGetRoleByUserResponse> getRoleByUser(@PathVariable("userId") Long userId){
         return userService.getRoleById(userId);
+    }
+
+    @Operation(summary = "Get Permission by User ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get Permission Success",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Role.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = @Content) })
+    @GetMapping("permissions/by-user/{userId}")
+    public List<AuthGetAllPermissionAndGetPermissionByUserResponse> getPermissionByUser(@PathVariable("userId") Long userId){
+        return userService.getPermissionById(userId);
     }
 }

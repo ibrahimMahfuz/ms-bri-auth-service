@@ -28,7 +28,7 @@ public class User{
     @Column(name = "store_id")
     private Integer storeId;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_permissions",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -37,7 +37,7 @@ public class User{
     private Set<Permission> permissions;
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

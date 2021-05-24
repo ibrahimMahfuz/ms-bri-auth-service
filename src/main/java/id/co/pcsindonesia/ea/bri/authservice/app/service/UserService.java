@@ -1,9 +1,7 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.service;
 
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthRegisterRequest;
-import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthRegisterLoginResponse;
-import id.co.pcsindonesia.ea.bri.authservice.app.http.response.GlobalResponse;
-import id.co.pcsindonesia.ea.bri.authservice.app.http.response.TestResponse;
+import id.co.pcsindonesia.ea.bri.authservice.app.http.response.*;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Permission;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Role;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.User;
@@ -67,7 +65,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<Role> getRoleById(Long userId) {
-        return new ArrayList<>(userRepository.findById(userId).orElseThrow().getRoles());
+    public List<AuthGetAllRoleAndGetRoleByUserResponse> getRoleById(Long userId) {
+        return userRepository.findById(userId).orElseThrow().getRoles().stream().map(role -> new AuthGetAllRoleAndGetRoleByUserResponse(role.getId(), role.getName())).collect(Collectors.toList());
+    }
+
+    public List<AuthGetAllPermissionAndGetPermissionByUserResponse> getPermissionById(Long userId) {
+        return userRepository.findById(userId).orElseThrow().getPermissions().stream()
+                .map(permission -> new AuthGetAllPermissionAndGetPermissionByUserResponse(permission.getId(), permission.getName())).collect(Collectors.toList());
     }
 }
