@@ -21,11 +21,9 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private List<Permission> permissions;
+    @OneToMany(mappedBy = "role")
+    private List<RolePermission> permissions;
+
+    @OneToMany(mappedBy = "role")
+    private List<UserRole> users;
 }

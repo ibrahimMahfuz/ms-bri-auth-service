@@ -3,6 +3,7 @@ package id.co.pcsindonesia.ea.bri.authservice.app.http.controller;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthCreateNewRoleRequest;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthLoginRequest;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthRegisterRequest;
+import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthSetUserRoleRequest;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthGetAllPermissionAndGetPermissionByUserResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthGetAllRoleAndGetRoleByUserResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthRegisterLoginResponse;
@@ -127,5 +128,20 @@ public class AuthController {
     @GetMapping("permissions/by-user/{userId}")
     public List<AuthGetAllPermissionAndGetPermissionByUserResponse> getPermissionByUser(@PathVariable("userId") Long userId){
         return userService.getPermissionById(userId);
+    }
+
+    @Operation(summary = "Set User Roles", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Syncronize user roles",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Role.class)) }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden",
+                    content = @Content) })
+    @PatchMapping("users/set-roles/{userId}")
+    public GlobalResponse<String> setUserRole(@PathVariable("userId") Long userId, @RequestBody AuthSetUserRoleRequest authSetUserRoleRequest){
+
+        return userService.setUserRole(authSetUserRoleRequest, userId);
     }
 }

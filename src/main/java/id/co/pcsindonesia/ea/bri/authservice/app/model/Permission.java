@@ -9,11 +9,12 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
+@Entity
 @Table(name = "permissions")
 public class Permission {
 
@@ -24,7 +25,9 @@ public class Permission {
     @Column(unique = true)
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
-    private Set<User> users;
+    @OneToMany(mappedBy = "permission")
+    private Set<UserPermission> users;
+
+    @OneToMany(mappedBy = "permission")
+    private Set<RolePermission> roles;
 }
