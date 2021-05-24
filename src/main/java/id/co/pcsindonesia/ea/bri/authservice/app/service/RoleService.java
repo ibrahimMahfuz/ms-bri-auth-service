@@ -7,12 +7,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RoleService {
 
     private final RoleRepository roleRepository;
+
+    public List<Role> getAllRole(){
+        return roleRepository.findAll();
+    }
 
     @Transactional
     public Role createNewRole(AuthCreateNewRoleRequest authCreateNewRoleRequest) {

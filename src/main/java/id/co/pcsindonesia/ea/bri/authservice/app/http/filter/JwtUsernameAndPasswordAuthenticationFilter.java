@@ -5,6 +5,7 @@ import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthLoginRequest;
 import id.co.pcsindonesia.ea.bri.authservice.builder.AuthRegisterLoginResponseBuilder;
 import id.co.pcsindonesia.ea.bri.authservice.configure.JwtConfiguration;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,12 +64,15 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("succeses");
-        String responseToken = "Bearer " + Jwts.builder()
+        String responseToken = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfiguration.getTokenExpirationAfterDays())))
-                .signWith(Keys.hmacShaKeyFor(jwtConfiguration.getSecret().getBytes(StandardCharsets.UTF_8)))
+                .signWith(
+                        Keys.hmacShaKeyFor(jwtConfiguration.getSecret().getBytes(StandardCharsets.UTF_8)),
+                        SignatureAlgorithm.HS256
+                )
                 .compact();
 
         AuthRegisterLoginResponseBuilder.getInstance(response, objectMapper)

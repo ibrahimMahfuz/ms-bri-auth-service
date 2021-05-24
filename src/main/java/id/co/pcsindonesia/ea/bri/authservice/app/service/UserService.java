@@ -5,6 +5,7 @@ import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthRegisterLogin
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.GlobalResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.TestResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Permission;
+import id.co.pcsindonesia.ea.bri.authservice.app.model.Role;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.User;
 import id.co.pcsindonesia.ea.bri.authservice.app.repository.UserRepository;
 import id.co.pcsindonesia.ea.bri.authservice.configure.JwtConfiguration;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -65,4 +67,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<Role> getRoleById(Long userId) {
+        return new ArrayList<>(userRepository.findById(userId).orElseThrow().getRoles());
+    }
 }

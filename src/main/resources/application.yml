@@ -13,3 +13,5 @@ appication:
     properties:
       secret: pcsindonesiapcsindonesiapcsindonesiapcsindonesia
       tokenExpirationAfterDays: 10
+server:
+  port: 80
