@@ -1,9 +1,6 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Entity
+@Builder
 @Table(name = "user_permissions")
 public class UserPermission {
 

@@ -1,12 +1,13 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.service;
 
 import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthRegisterRequest;
-import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthSetUserRoleRequest;
+import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthSyncUserPermissionAndSyncRolePermissionRequest;
+import id.co.pcsindonesia.ea.bri.authservice.app.http.request.AuthSyncUserRoleRequest;
 import id.co.pcsindonesia.ea.bri.authservice.app.http.response.*;
-import id.co.pcsindonesia.ea.bri.authservice.app.model.Permission;
-import id.co.pcsindonesia.ea.bri.authservice.app.model.Role;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.User;
-import id.co.pcsindonesia.ea.bri.authservice.app.repository.UserRepository;
+import id.co.pcsindonesia.ea.bri.authservice.app.model.UserPermission;
+import id.co.pcsindonesia.ea.bri.authservice.app.model.UserRole;
+import id.co.pcsindonesia.ea.bri.authservice.app.repository.*;
 import id.co.pcsindonesia.ea.bri.authservice.configure.JwtConfiguration;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -19,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +28,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtConfiguration jwtConfiguration;
+    private final UserRoleRepository userRoleRepository;
+    private final UserPermissionRepository userPermissionRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
     @Transactional
     public GlobalResponse<AuthRegisterLoginResponse> createNewUser(AuthRegisterRequest authRegisterRequest) {
@@ -88,14 +92,33 @@ public class UserService {
     }
 
     @Transactional
-    public GlobalResponse<String> setUserRole(AuthSetUserRoleRequest authSetUserRoleRequest, Long userId) {
+    public GlobalResponse<String> syncUserRole(AuthSyncUserRoleRequest authSetUserRoleRequest, Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
-        Role role = new Role();
+        userRoleRepository.deleteUserRoleByUser(user);
         authSetUserRoleRequest.getRoleId().forEach(aLong -> {
-            role.setId(aLong);
-            user.getRoles().remove(role);
+            roleRepository.findById(aLong).ifPresent(role -> {
+                UserRole userRole = UserRole.builder().user(user).role(role)
+                        .build();
+                userRoleRepository.save(userRole);
+            });
+
         });
 
        return new GlobalResponse<>(201, "user role syncronized.", null);
+    }
+
+    public GlobalResponse<String> syncUserPermission(AuthSyncUserPermissionAndSyncRolePermissionRequest request, Long userId){
+        User user = userRepository.findById(userId).orElseThrow();
+        userPermissionRepository.deleteUserPermissionByUser(user);
+        request.getPermissionId().forEach(aLong -> {
+            permissionRepository.findById(aLong).ifPresent(permission -> {
+                UserPermission userPermission = UserPermission.builder().user(user).permission(permission)
+                        .build();
+                userPermissionRepository.save(userPermission);
+            });
+
+        });
+
+        return new GlobalResponse<>(201, "user role syncronized.", null);
     }
 }
