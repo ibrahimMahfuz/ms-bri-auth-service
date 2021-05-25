@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Builder
-@Table(name = "user_permissions")
-public class UserPermission {
+@Table(name = "user_forgot_password_questions")
+public class UserForgotPasswordQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,6 @@ public class UserPermission {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "permission_id")
-    private Permission permission;
+    @JoinColumn(name = "forgot_password_question_id")
+    private ForgotPasswordQuestion forgotPasswordQuestion;
 }

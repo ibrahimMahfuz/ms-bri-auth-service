@@ -5,7 +5,7 @@ spring:
     password: chWy45XCbPXD6b66bycxKRimxhN3RdFryDWMP2e8F4JMz5Rd
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
 appication:

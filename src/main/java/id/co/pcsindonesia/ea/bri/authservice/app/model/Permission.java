@@ -1,10 +1,7 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,11 +12,12 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
+@Builder
 @Table(name = "permissions")
 public class Permission {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)

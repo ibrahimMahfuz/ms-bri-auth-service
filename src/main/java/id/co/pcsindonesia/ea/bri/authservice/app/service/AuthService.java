@@ -1,5 +1,6 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.service;
 
+import id.co.pcsindonesia.ea.bri.authservice.app.http.response.AuthGetAllPermissionAndGetPermissionByUserResponse;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Auth;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.Permission;
 import id.co.pcsindonesia.ea.bri.authservice.app.model.User;
@@ -37,6 +38,16 @@ public class AuthService implements UserDetailsService {
         .stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission().getName()))
                 .collect(Collectors.toSet());
+        Set<SimpleGrantedAuthority> byRolePermissions = user.getRoles().stream()
+                .map(userRole -> {
+                    return userRole.getRole().getPermissions();
+                })
+                .collect(Collectors.toList()).stream()
+                .flatMap(Collection::stream)
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission().getName()))
+                .collect(Collectors.toSet());
+        grantedAuthorities.addAll(byRolePermissions);
+
         return Auth.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
