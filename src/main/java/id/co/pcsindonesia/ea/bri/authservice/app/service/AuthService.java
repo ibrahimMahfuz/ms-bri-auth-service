@@ -39,10 +39,8 @@ public class AuthService implements UserDetailsService {
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission().getName()))
                 .collect(Collectors.toSet());
         Set<SimpleGrantedAuthority> byRolePermissions = user.getRoles().stream()
-                .map(userRole -> {
-                    return userRole.getRole().getPermissions();
-                })
-                .collect(Collectors.toList()).stream()
+                .map(userRole -> userRole.getRole().getPermissions())
+                .collect(Collectors.toSet()).stream()
                 .flatMap(Collection::stream)
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission().getName()))
                 .collect(Collectors.toSet());

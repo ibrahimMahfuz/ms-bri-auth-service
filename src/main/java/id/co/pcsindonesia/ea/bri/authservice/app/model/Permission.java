@@ -23,9 +23,11 @@ public class Permission {
     @Column(unique = true)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "permission")
     private Set<UserPermission> users;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "permission")
     private Set<RolePermission> roles;
 }

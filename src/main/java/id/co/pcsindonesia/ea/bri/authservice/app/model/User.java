@@ -28,12 +28,15 @@ public class User{
     @Column(name = "store_id")
     private Integer storeId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<UserPermission> permissions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<UserRole> roles;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<UserForgotPasswordQuestion> userForgotPasswordQuestions;
 

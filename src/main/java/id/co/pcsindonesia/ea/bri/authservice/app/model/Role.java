@@ -1,5 +1,6 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +22,11 @@ public class Role {
     @Column(unique = true)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private List<RolePermission> permissions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role")
     private List<UserRole> users;
 }

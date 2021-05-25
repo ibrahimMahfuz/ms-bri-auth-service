@@ -1,12 +1,16 @@
 package id.co.pcsindonesia.ea.bri.authservice.app.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "forgot_password_questions")
 public class ForgotPasswordQuestion {
 
@@ -17,6 +21,7 @@ public class ForgotPasswordQuestion {
     @Column(unique = true)
     private String Question;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "forgotPasswordQuestion")
     private Set<UserForgotPasswordQuestion> userForgotPasswordQuestions;
 }

@@ -144,7 +144,7 @@ public class AuthController {
                     content = @Content) })
     @PatchMapping("users/sync-roles/{userId}")
     @PreAuthorize("hasAnyAuthority('user-role:write')")
-    public GlobalResponse<String> syncUserRole(@PathVariable("userId") Long userId, @RequestBody AuthSyncUserRoleRequest authSetUserRoleRequest){
+    public GlobalResponse<String> syncUserRole(@PathVariable("userId") Long userId,@Valid @RequestBody AuthSyncUserRoleRequest authSetUserRoleRequest){
         return userService.syncUserRole(authSetUserRoleRequest, userId);
     }
 
@@ -159,7 +159,7 @@ public class AuthController {
                     content = @Content) })
     @PatchMapping("users/sync-permissions/{userId}")
     @PreAuthorize("hasAnyAuthority('user-permission:write')")
-    public GlobalResponse<String> syncUserPermission(@PathVariable("userId") Long userId, @RequestBody AuthSyncUserPermissionAndSyncRolePermissionRequest request){
+    public GlobalResponse<String> syncUserPermission(@PathVariable("userId") Long userId,@Valid @RequestBody AuthSyncUserPermissionAndSyncRolePermissionRequest request){
         return userService.syncUserPermission(request, userId);
     }
 
@@ -174,7 +174,7 @@ public class AuthController {
                     content = @Content) })
     @PatchMapping("roles/sync-permissions/{roleId}")
     @PreAuthorize("hasAnyAuthority('role-permission:write')")
-    public GlobalResponse<String> syncRolePermission(@PathVariable("roleId") Long roleId, @RequestBody AuthSyncUserPermissionAndSyncRolePermissionRequest request){
+    public GlobalResponse<String> syncRolePermission(@PathVariable("roleId") Long roleId,@Valid @RequestBody AuthSyncUserPermissionAndSyncRolePermissionRequest request){
         return roleService.syncRolePermission(request, roleId);
     }
 }
